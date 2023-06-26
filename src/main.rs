@@ -12,10 +12,11 @@ fn main() {
     // if args.len() != 3 { panic!("Usage: flag filename\nflag: c (compress) or d (decompress)") }
     // let flag = args[1].as_str();
     // let filename = &args[2];
-    let test_file = read_hdf5().unwrap();
-    let test_file = test_file.as_reader();
-    let test_arr = test_file.read_2d::<u8>().unwrap();
-    println!("{:#?}", test_arr);
+    let test_file = create_hdf5();
+    // let test_file = read_hdf5().unwrap();
+    // let test_file = test_file.as_reader();
+    // let test_arr = test_file.read_2d::<u8>().unwrap();
+    // println!("{:#?}", test_arr);
 
     // let now = Instant::now();
 
@@ -41,14 +42,14 @@ fn main() {
 
 fn create_hdf5() -> hdf5::Result<()> {
     let file = hdf5::File::create("testhdf.h5")?;
-    let testarr = ndarray::array![[1,2,3,4],[5,6,7,8]];
-    let anotherarr = ndarray::array![[10,20,30,40],[50,60,70,80]];
-    let colors = file.new_dataset::<u8>().create("testArray")?;
-    colors.write(&testarr)?;
-
-    let group = file.create_group("testGroup")?;
-    let pixels = group.new_dataset::<u8>().create("anotherArray")?;
-    pixels.write(&anotherarr)?;
+    let data = vec![1,2,3,4,5,6,7,8,9,0];
+    let data2 = ndarray::array![[1,2,3,4,5],[6,7,8,9,0]];
+    let group = file.create_group("example_group")?;
+    let data_set = group
+        .new_dataset::<i32>()
+        .shape([5,2])
+        .create("example_Data")?;
+    data_set.write(&data2)?;
 
     Ok(())
 }
