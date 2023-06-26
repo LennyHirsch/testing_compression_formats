@@ -38,26 +38,6 @@ impl Pixel {
     }
 }
 
-fn write_png_to_hdf5() -> Result<()> {
-    let file = hdf5::File::create("imgs.h5")?;
-    let group = file.create_group("images")?;
-    
-    let img = ImageReader::open("example_images/img1.png").unwrap().decode().unwrap();
-    let shape = img.as_bytes().len();
-
-    let data_set = group
-        .new_dataset::<u8>()
-        .shape([shape])
-        .create("example_images")?;
-    data_set.write(&img.as_bytes())?;
-
-    let img = ImageReader::open("example_images/img2.png").unwrap().decode().unwrap();
-
-    data_set.write(&img.as_bytes())?;
-
-    Ok(())
-}
-
 fn write_hdf5() -> Result<()> {
     use Colors::*;
     let file = hdf5::File::create("pixels.h5")?;
@@ -96,10 +76,10 @@ fn main() -> Result<()> {
     
     // read_hdf5()?;
 
-    // let img = ImageReader::open("example_images/img1.png").unwrap().decode().unwrap();
-    // println!("Length of image in bytes: {:#?}", img.as_bytes().len());
+    let img = ImageReader::open("example_images/img1.png").unwrap().decode().unwrap();
+    println!("Length of image in bytes: {:#?}", img.as_bytes().len());
 
-    // write_hdf5()?;
-    write_png_to_hdf5()?;
+    write_hdf5()?;
+
     Ok(())
 }

@@ -7,5 +7,6 @@ edition = "2021"
 
 [dependencies]
 hdf5 = "0.8.1"
+image = "0.24.6"
 ndarray = "0.15.6"
 zstd = "0.12.3"
